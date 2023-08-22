@@ -3,8 +3,11 @@ extern crate log;
 
 use std::process::ExitCode;
 
+mod analyzer;
 mod arguments;
 mod configuration;
+mod internals;
+mod reflection;
 mod trynary_logic;
 
 pub use arguments::*;

@@ -1,5 +1,6 @@
-use serde::Deserialize;
 use std::{fs, path::PathBuf};
+
+use serde::Deserialize;
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct Configuration {

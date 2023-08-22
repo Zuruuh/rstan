@@ -3,10 +3,13 @@ extern crate log;
 
 use std::process::ExitCode;
 
-use crate::arguments::Arguments;
-
 mod arguments;
 mod configuration;
+mod trynary_logic;
+
+pub use arguments::*;
+pub use configuration::*;
+pub use trynary_logic::*;
 
 #[tokio::main]
 async fn main() -> ExitCode {

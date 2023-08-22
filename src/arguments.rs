@@ -6,7 +6,7 @@ use clap::{
 };
 use clap_verbosity_flag::Verbosity;
 
-use crate::configuration::Configuration;
+use crate::Configuration;
 
 #[derive(clap::Parser, Clone, Debug)]
 #[command(author, version, about)]

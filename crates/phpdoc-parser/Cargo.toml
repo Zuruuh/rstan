@@ -4,9 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "generate-lexer-regex"
-path = "bin/generate_lexer_regex.rs"
-
-[dependencies]
-lazy_static = "1.4.0"
-regex = "1.9.3"
+name = "snapshot"
+path = "bin/snapshot.rs"

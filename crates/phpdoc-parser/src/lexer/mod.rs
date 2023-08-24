@@ -1,19 +1,61 @@
-mod lexer_offset;
 mod lexer_token;
 
-use lazy_static::lazy_static;
 pub use lexer_token::LexerToken;
-pub use regex::Regex;
+
+/// 0 Original String
+/// 1 Extracted String
+pub type ExtractionResult = (String, String);
 
 pub struct Lexer;
 
-pub struct Token(LexerToken, usize, usize);
+impl Lexer {
+    pub fn tokenize(string: &String) -> Result<Vec<LexerToken>, String> {
+        let mut tokens: Vec<LexerToken> = vec![];
+        let lines = string.lines().map(|line| line.chars().enumerate().peekable());
 
-lazy_static! {
-    static ref LEXER_TOKENS_REGEXPS: Regex =
-        Regex::new(include_str!("../../static/lexer_regex.txt")).unwrap();
+        for line in lines {
+            for (col, char) in line {
+                match char {
+                    '' =>
+                    _ => todo!(),
+                }
+            }
+        }
+        // let (string, start) = Self::extract(string, "/**").map_err(|_| "...".to_owned())?;
+        //
+        // tokens.push();
+        //
+        Ok(tokens)
+    }
+
+    fn extract(string: String, to_extract: &str) -> Result<ExtractionResult, ()> {
+        let string = string.trim();
+        let new_string = string.replace(to_extract, "");
+
+        if new_string == string {
+            return Err(());
+        }
+
+        Ok((new_string, to_extract.to_owned()))
+    }
+
+    // fn extract_word()
 }
 
-impl Lexer {
-    pub fn tokenize(string: String) -> Vec<Token> { vec![] }
+#[cfg(test)]
+mod test {
+    use super::Lexer;
+
+    #[test]
+    pub fn yes() {
+        let string = String::from(
+            r#"
+        /**
+         * @param bool $test
+         */
+        "#,
+        );
+
+        Lexer::tokenize(&string).unwrap();
+    }
 }

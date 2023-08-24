@@ -6,3 +6,6 @@ edition = "2021"
 [[bin]]
 name = "snapshot"
 path = "bin/snapshot.rs"
+
+[dependencies]
+logos = "0.13.0"

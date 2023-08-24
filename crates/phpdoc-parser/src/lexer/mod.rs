@@ -1,45 +1,19 @@
-mod lexer_token;
+mod token;
 
-pub use lexer_token::LexerToken;
-
-/// 0 Original String
-/// 1 Extracted String
-pub type ExtractionResult = (String, String);
+use logos::Logos;
+pub use token::Token;
 
 pub struct Lexer;
 
 impl Lexer {
-    pub fn tokenize(string: &String) -> Result<Vec<LexerToken>, String> {
-        let mut tokens: Vec<LexerToken> = vec![];
-        let lines = string.lines().map(|line| line.chars().enumerate().peekable());
+    pub fn tokenize(string: &String) -> Result<Vec<Token>, String> {
+        let mut tokens: Vec<Token> = vec![];
+        let lexer = Token::lexer(string);
 
-        for line in lines {
-            for (col, char) in line {
-                match char {
-                    '' =>
-                    _ => todo!(),
-                }
-            }
-        }
-        // let (string, start) = Self::extract(string, "/**").map_err(|_| "...".to_owned())?;
-        //
-        // tokens.push();
-        //
+        dbg!(lexer.collect::<Vec<_>>());
+
         Ok(tokens)
     }
-
-    fn extract(string: String, to_extract: &str) -> Result<ExtractionResult, ()> {
-        let string = string.trim();
-        let new_string = string.replace(to_extract, "");
-
-        if new_string == string {
-            return Err(());
-        }
-
-        Ok((new_string, to_extract.to_owned()))
-    }
-
-    // fn extract_word()
 }
 
 #[cfg(test)]

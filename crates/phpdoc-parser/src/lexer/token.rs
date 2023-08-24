@@ -1,55 +1,90 @@
 use std::fmt::Display;
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum LexerTokenKind {
+use logos::Logos;
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Logos)]
+pub enum Token {
+    #[regex(r#" +"#, |lex| lex.slice().parse().map(|whitespace: String| whitespace.len()).ok())]
+    Whitespace(usize),
+    #[token("\n")]
+    LineJump,
+    #[token("*")]
+    Line,
+    #[token("&", priority = 2)]
     Reference,
+    #[token("|")]
     Union,
+    #[token("&", priority = 1)]
     Intersection,
+    #[token("?")]
     Nullable,
+    #[token("!")]
     Negated,
+    #[token("(")]
     OpenParentheses,
+    #[token(")")]
     CloseParentheses,
+    #[token("<")]
     OpenAngleBracket,
+    #[token(">")]
     CloseAngleBracket,
+    #[token("[")]
     OpenSquareBracket,
+    #[token("]")]
     CloseSquareBracket,
+    #[token("{")]
     OpenCurlyBracket,
+    #[token("}")]
     CloseCurlyBracket,
+    #[token(",")]
     Comma,
+    #[token(":")]
     Colon,
+    #[token("...")]
     Variadic,
+    #[token("::")]
     DoubleColon,
+    #[token("=>")]
     DoubleArrow,
+    #[token("->")]
     Arrow,
+    #[token("=")]
     Equal,
+    #[token("/**")]
     OpenPhpdoc,
+    #[token("*/")]
     ClosePhpdoc,
-    LiteralFloat(String),
+    #[regex(r#"-?[0-9]+"#, |lex| lex.slice().parse().ok(), priority = 2)]
     LiteralInteger(String),
+    #[regex(r#"-?[0-9]+\.[0-9]+"#, |lex| lex.slice().parse().ok())]
+    LiteralFloat(String),
+    #[regex(r#"'.*'"#, |lex| lex.slice().parse().ok())]
     LiteralSingleQuotedString(String),
+    #[regex(r#"".*""#, |lex| lex.slice().parse().ok())]
     LiteralDoubleQuotedString(String),
-    Identifier(String),
+    #[token("\\$this")]
     This,
+    #[token("static")]
+    Static,
+    #[token("self")]
+    _Self,
+    #[regex(r#"@[\w-]+"#, |lex| lex.slice().parse().ok(), priority = 3)]
+    Tag(String),
+    #[regex(r#"\$[\w_][\w\d_]*"#, |lex| lex.slice().parse().ok())]
     Variable(String),
+    #[regex(r#"[\w_][\w\d_\-\\]*"#, |lex| lex.slice().parse().ok())]
+    Identifier(String),
 }
 
-pub struct Position {
-    pub start_col: usize,
-    pub line: usize,
-}
-
-pub struct LexerToken {
-    pub content: String,
-    pub token: LexerTokenKind,
-    pub position: Position,
-}
-
-impl Display for LexerTokenKind {
+impl Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
             "{}",
             match self {
+                Self::Whitespace(length) => " ".repeat(length.clone()),
+                Self::LineJump => "\n".to_owned(),
+                Self::Line => "*".to_owned(),
                 Self::Reference => "&".to_owned(),
                 Self::Union => "|".to_owned(),
                 Self::Intersection => "&".to_owned(),
@@ -78,7 +113,10 @@ impl Display for LexerTokenKind {
                 Self::LiteralDoubleQuotedString(literal) => format!("\"{}\"", literal),
                 Self::Identifier(identifier) => identifier.clone(),
                 Self::This => "$this".to_owned(),
-                Self::Variable(variable) => format!("${variable}"),
+                Self::_Self => "self".to_owned(),
+                Self::Static => "static".to_owned(),
+                Self::Tag(tag) => "tag".to_owned(),
+                Self::Variable(variable) => variable.clone(),
             }
         )
     }

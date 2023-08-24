@@ -206,6 +206,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "acbf1af155f9b9ef647e42cdc158db4b64a1b61f743629225fde6f3e0be2a7c7"
 
 [[package]]
+name = "docblock-parser"
+version = "0.1.0"
+source = "git+https://github.com/php-rust-tools/docblock-parser#6deb88b4393bc699d94b4df1620b5f4c15174c56"
+
+[[package]]
 name = "dyn-clone"
 version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -491,6 +496,7 @@ dependencies = [
  "ariadne 0.3.0",
  "clap",
  "clap-verbosity-flag",
+ "docblock-parser",
  "env_logger",
  "log",
  "php-parser-rs",

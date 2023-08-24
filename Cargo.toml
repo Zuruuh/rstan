@@ -9,6 +9,7 @@ edition = "2021"
 ariadne = "0.3.0"
 clap = { version = "4.3.23", features = ["string", "derive"] }
 clap-verbosity-flag = "2.0.1"
+docblock-parser = { git = "https://github.com/php-rust-tools/docblock-parser", version = "0.1.0" }
 env_logger = "0.10.0"
 log = "0.4.20"
 php-parser-rs = { git = "https://github.com/php-rust-tools/parser", version = "0.1.3" }

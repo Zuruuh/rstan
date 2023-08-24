@@ -1,16 +1,4 @@
-/**
- 
-	public function isInClass(): bool;
-
-	public function getClassReflection(): ?ClassReflection;
-
-	public function canAccessProperty(PropertyReflection $propertyReflection): bool;
-
-	public function canCallMethod(MethodReflection $methodReflection): bool;
-
-	public function canAccessConstant(ConstantReflection $constantReflection): bool;
-
-    **/
+use crate::reflection::ClassReflection;
 
 pub trait ClassMemberAnswerer {
     fn is_in_class(&self) -> bool;

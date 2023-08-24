@@ -2,3 +2,4 @@ edition = "2021"
 imports_granularity = "Crate"
 reorder_imports = true
 group_imports = "StdExternalCrate"
+fn_single_line = true

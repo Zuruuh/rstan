@@ -8,11 +8,12 @@ mod arguments;
 mod configuration;
 mod internals;
 mod reflection;
-mod trynary_logic;
+mod trinary_logic;
+mod r#type;
 
 pub use arguments::*;
 pub use configuration::*;
-pub use trynary_logic::*;
+pub use trinary_logic::*;
 
 #[tokio::main]
 async fn main() -> ExitCode {

@@ -3,17 +3,9 @@ extern crate log;
 
 use std::process::ExitCode;
 
-mod analyzer;
 mod arguments;
-mod configuration;
-mod internals;
-mod reflection;
-mod trinary_logic;
-mod r#type;
 
 pub use arguments::*;
-pub use configuration::*;
-pub use trinary_logic::*;
 
 #[tokio::main]
 async fn main() -> ExitCode {
@@ -31,6 +23,8 @@ async fn main() -> ExitCode {
         .init();
 
     info!("Booting RStan");
+
+    // Do the actual analysis
 
     ExitCode::SUCCESS
 }

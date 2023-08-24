@@ -5,8 +5,7 @@ use clap::{
     Parser,
 };
 use clap_verbosity_flag::Verbosity;
-
-use crate::Configuration;
+use rstan::Configuration;
 
 #[derive(clap::Parser, Clone, Debug)]
 #[command(author, version, about)]
@@ -27,9 +26,7 @@ pub struct Arguments {
 }
 
 impl Arguments {
-    pub fn parse() -> Result<Self, clap::Error> {
-        RawArguments::parse().try_into()
-    }
+    pub fn parse() -> Result<Self, clap::Error> { RawArguments::parse().try_into() }
 }
 
 impl TryInto<Arguments> for RawArguments {

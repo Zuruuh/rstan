@@ -492,13 +492,23 @@ checksum = "e5ea92a5b6195c6ef2a0295ea818b312502c6fc94dde986c5553242e18fd4ce2"
 name = "rstan"
 version = "0.1.0"
 dependencies = [
+ "log",
+ "php-parser-rs",
+ "phpdoc-parser",
+ "serde",
+ "toml",
+]
+
+[[package]]
+name = "rstan-cli"
+version = "0.1.0"
+dependencies = [
  "ariadne 0.3.0",
  "clap",
  "clap-verbosity-flag",
  "env_logger",
  "log",
- "php-parser-rs",
- "phpdoc-parser",
+ "rstan",
  "serde",
  "tokio",
  "toml",

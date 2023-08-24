@@ -1,13 +1,13 @@
 use super::Type;
 
-pub trait ArrayType {}
+pub trait ObjectType {}
 
-impl Type for dyn ArrayType {
+impl Type for dyn ObjectType {
     fn describe(&self, verbosity: super::VerbosityLevel) -> String { String::from("bool") }
 
     fn get_constant_string(&self) -> Vec<String> { vec![] }
 }
 
-pub struct DefaultArrayType;
+pub struct DefaultObjectType;
 
-impl ArrayType for DefaultArrayType {}
+impl ObjectType for DefaultObjectType {}

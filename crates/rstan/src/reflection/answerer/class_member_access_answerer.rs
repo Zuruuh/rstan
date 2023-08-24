@@ -9,7 +9,7 @@ pub trait ClassMemberAccessAnswerer {
 
     fn can_access_property(&self, property_reflection: PropertyReflection) -> bool;
 
-    fn can_call_method(&self, method_reflection: MethodReflection) -> bool;
+    fn can_call_method(&self, method_reflection: Box<&dyn MethodReflection>) -> bool;
 
     fn can_access_constant(&self, constant_reflection: ConstantReflection) -> bool;
 }

@@ -1,7 +1,16 @@
-use super::{AcceptsResult, BooleanType, DefaultBooleanType, VerbosityLevel};
+use super::{
+    constant::{ConstantArrayType, ConstantScalarType, ConstantScalarValue, ConstantStringType},
+    generic::{TemplateTypeMap, TemplateTypeReference, TemplateTypeVariance},
+    r#enum::EnumCaseObjectType,
+    AcceptsResult, ArrayType, BooleanType, DefaultBooleanType, GeneralizePrecision, NeverType,
+    VerbosityLevel,
+};
 use crate::{
+    php::PhpVersion,
     reflection::{
-        ClassMemberAccessAnswerer, ClassReflection, ConstantReflection, PropertyReflection,
+        r#type::{UnresolvedMethodPrototypeReflection, UnresolvedPropertyPrototypeReflection},
+        ClassMemberAccessAnswerer, ClassReflection, ConstantReflection, ExtendedMethodReflection,
+        ParametersAcceptor, PropertyReflection,
     },
     TrinaryLogic,
 };
@@ -21,7 +30,7 @@ pub trait Type {
 
     fn is_enum(&self) -> TrinaryLogic { TrinaryLogic::No }
 
-    fn get_arrays(&self) -> Vec<ArrayType> { vec![] }
+    fn get_arrays(&self) -> Vec<Box<dyn ArrayType>> { todo!() }
 
     fn get_constant_arrays(&self) -> Vec<ConstantArrayType> { vec![] }
 
@@ -57,7 +66,7 @@ pub trait Type {
         &self,
         property: String,
         scope: Box<&dyn ClassMemberAccessAnswerer>,
-    ) -> Result<UnresolvedPropertyPrototypeReflection, ()> {
+    ) -> Result<Box<dyn UnresolvedPropertyPrototypeReflection>, ()> {
         Err(())
     }
 
@@ -69,7 +78,7 @@ pub trait Type {
         &self,
         method_name: String,
         scope: Box<&dyn ClassMemberAccessAnswerer>,
-    ) -> Result<ExtendedMethodReflection, ()> {
+    ) -> Result<Box<dyn ExtendedMethodReflection>, ()> {
         Err(())
     }
 
@@ -77,7 +86,7 @@ pub trait Type {
         &self,
         method_name: String,
         scope: Box<&dyn ClassMemberAccessAnswerer>,
-    ) -> Result<UnresolvedMethodPrototypeReflection, ()> {
+    ) -> Result<Box<dyn UnresolvedMethodPrototypeReflection>, ()> {
         Err(())
     }
 
@@ -165,7 +174,7 @@ pub trait Type {
     fn get_callable_parameters_acceptors(
         &self,
         scope: Box<&dyn ClassMemberAccessAnswerer>,
-    ) -> Vec<ParametersAcceptor> {
+    ) -> Vec<Box<dyn ParametersAcceptor>> {
         vec![]
     }
 
@@ -197,7 +206,7 @@ pub trait Type {
     /// Is Type of a known constant scalar value? Includes literal strings, integers, floats, true, false, and null.
     fn is_constant_scalar_value(&self) -> TrinaryLogic { TrinaryLogic::No }
 
-    fn is_constant_scalar_types(&self) -> Vec<ConstantScalarType> { vec![] }
+    fn is_constant_scalar_types(&self) -> Vec<Box<dyn ConstantScalarType>> { vec![] }
 
     fn get_constant_scalar_values(&self) -> Vec<ConstantScalarValue> { vec![] }
 
@@ -237,13 +246,13 @@ pub trait Type {
         Box::new(DefaultBooleanType)
     }
 
-    fn get_smaller_type(&self) -> Box<&dyn Type> { Box::new(NeverType) }
+    fn get_smaller_type(&self) -> Box<dyn Type> { Box::new(NeverType) }
 
-    fn get_smaller_or_equal_type(&self) -> Box<&dyn Type> { Box::new(NeverType) }
+    fn get_smaller_or_equal_type(&self) -> Box<dyn Type> { Box::new(NeverType) }
 
-    fn get_greater_type(&self) -> Box<&dyn Type> { Box::new(NeverType) }
+    fn get_greater_type(&self) -> Box<dyn Type> { Box::new(NeverType) }
 
-    fn get_greater_or_equal_type(&self) -> Box<&dyn Type> { Box::new(NeverType) }
+    fn get_greater_or_equal_type(&self) -> Box<dyn Type> { Box::new(NeverType) }
 
     fn get_template_type(
         &self,
@@ -275,7 +284,8 @@ pub trait Type {
         todo!()
     }
 
-    fn to_php_doc_node(&self) -> TypeNode;
+    /// TODO: update return type
+    fn to_php_doc_node(&self) -> () { todo!() }
 
     fn try_remove(&self) -> Option<Box<dyn Type>> { None }
 

@@ -1,0 +1,17 @@
+[package]
+name = "rstan-cli"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ariadne = "0.3.0"
+clap = { version = "4.3.24", features = ["derive", "string"] }
+clap-verbosity-flag = "2.0.1"
+env_logger = "0.10.0"
+log = "0.4.20"
+rstan = { version = "*", path = "../rstan" }
+serde = { version = "1.0.186", features = ["derive"] }
+tokio = { version = "1.32.0", features = ["full"] }
+toml = "0.7.6"

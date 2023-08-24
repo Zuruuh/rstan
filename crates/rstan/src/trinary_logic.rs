@@ -10,17 +10,11 @@ pub enum TrinaryLogic {
 }
 
 impl TrinaryLogic {
-    pub fn yes(&self) -> bool {
-        self == &Self::Yes
-    }
+    pub fn yes(&self) -> bool { self == &Self::Yes }
 
-    pub fn no(&self) -> bool {
-        self == &Self::No
-    }
+    pub fn no(&self) -> bool { self == &Self::No }
 
-    pub fn maybe(&self) -> bool {
-        self == &Self::Maybe
-    }
+    pub fn maybe(&self) -> bool { self == &Self::Maybe }
 
     pub fn and(&self, other: &Self) -> Self {
         if self.yes() && other.yes() {
@@ -46,13 +40,13 @@ impl TrinaryLogic {
         Self::Maybe
     }
 
-    pub fn compare(&self, other: &Self) -> Option<&Self> {
+    pub fn compare(&self, other: &Self) -> Option<Self> {
         let self_value: i8 = self.clone().into();
         let other_value: i8 = other.clone().into();
 
         match (self_value > other_value, other_value > self_value) {
-            (true, false) => Some(self),
-            (false, true) => Some(other),
+            (true, false) => Some(self.clone()),
+            (false, true) => Some(other.clone()),
             _ => None,
         }
     }
@@ -77,7 +71,7 @@ impl Into<i8> for TrinaryLogic {
 }
 
 impl Into<Box<dyn BooleanType>> for TrinaryLogic {
-    fn into(self) -> Box<dyn BooleanType> {}
+    fn into(self) -> Box<dyn BooleanType> { todo!() }
 }
 
 impl From<bool> for TrinaryLogic {

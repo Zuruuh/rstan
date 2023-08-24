@@ -14,7 +14,7 @@ impl Type for dyn BooleanType {
 
     fn is_scalar(&self) -> TrinaryLogic { TrinaryLogic::Yes }
 
-    fn describe(&self, verbosity: super::VerbosityLevel) -> String { String::from("bool") }
+    fn describe(&self, _verbosity: super::VerbosityLevel) -> String { String::from("bool") }
 }
 
 pub struct DefaultBooleanType;

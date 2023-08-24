@@ -14,7 +14,7 @@ impl Type for dyn StringType {
 
     fn is_scalar(&self) -> TrinaryLogic { TrinaryLogic::Yes }
 
-    fn describe(&self, verbosity: super::VerbosityLevel) -> String { String::from("string") }
+    fn describe(&self, _verbosity: super::VerbosityLevel) -> String { String::from("string") }
 
     fn get_constant_string(&self) -> Vec<String> { vec![] }
 }

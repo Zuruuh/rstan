@@ -36,7 +36,7 @@ pub trait Type {
 
     fn get_constant_strings(&self) -> Vec<ConstantStringType> { vec![] }
 
-    fn accepts(&self, r#type: Box<&dyn Type>, strict_types: bool) -> AcceptsResult {
+    fn accepts(&self, _type: Box<&dyn Type>, _strict_types: bool) -> AcceptsResult {
         AcceptsResult::create_no()
     }
 
@@ -44,7 +44,7 @@ pub trait Type {
 
     fn get_constant_string(&self) -> Vec<String> { vec![] }
 
-    fn is_super_type_of(&self, r#type: Box<&dyn Type>) -> TrinaryLogic { TrinaryLogic::No }
+    fn is_super_type_of(&self, _type: Box<&dyn Type>) -> TrinaryLogic { TrinaryLogic::No }
 
     fn equals(&self, r#type: Box<&dyn Type>) -> bool {
         self.describe(VerbosityLevel::Value) == r#type.describe(VerbosityLevel::Value)
@@ -52,49 +52,49 @@ pub trait Type {
 
     fn can_access_properties(&self) -> TrinaryLogic { TrinaryLogic::No }
 
-    fn has_property(&self, property: String) -> TrinaryLogic { TrinaryLogic::No }
+    fn has_property(&self, _property: String) -> TrinaryLogic { TrinaryLogic::No }
 
     fn get_property(
         &self,
-        property: String,
-        scope: Box<&dyn ClassMemberAccessAnswerer>,
+        _property: String,
+        _scope: Box<&dyn ClassMemberAccessAnswerer>,
     ) -> Result<PropertyReflection, ()> {
         Err(())
     }
 
     fn get_unresolved_property_prototype(
         &self,
-        property: String,
-        scope: Box<&dyn ClassMemberAccessAnswerer>,
+        _property: String,
+        _scope: Box<&dyn ClassMemberAccessAnswerer>,
     ) -> Result<Box<dyn UnresolvedPropertyPrototypeReflection>, ()> {
         Err(())
     }
 
     fn can_call_methods(&self) -> TrinaryLogic { TrinaryLogic::No }
 
-    fn has_method(&self, method_name: String) -> TrinaryLogic { TrinaryLogic::No }
+    fn has_method(&self, _method_name: String) -> TrinaryLogic { TrinaryLogic::No }
 
     fn get_method(
         &self,
-        method_name: String,
-        scope: Box<&dyn ClassMemberAccessAnswerer>,
+        _method_name: String,
+        _scope: Box<&dyn ClassMemberAccessAnswerer>,
     ) -> Result<Box<dyn ExtendedMethodReflection>, ()> {
         Err(())
     }
 
     fn get_unresolved_method_prototype(
         &self,
-        method_name: String,
-        scope: Box<&dyn ClassMemberAccessAnswerer>,
+        _method_name: String,
+        _scope: Box<&dyn ClassMemberAccessAnswerer>,
     ) -> Result<Box<dyn UnresolvedMethodPrototypeReflection>, ()> {
         Err(())
     }
 
     fn can_access_constants(&self) -> TrinaryLogic { TrinaryLogic::No }
 
-    fn has_constant(&self, constant_name: String) -> TrinaryLogic { TrinaryLogic::No }
+    fn has_constant(&self, _constant_name: String) -> TrinaryLogic { TrinaryLogic::No }
 
-    fn get_constant(&self, constant_name: String) -> Result<ConstantReflection, ()> { Err(()) }
+    fn get_constant(&self, _constant_name: String) -> Result<ConstantReflection, ()> { Err(()) }
 
     fn is_iterable(&self) -> TrinaryLogic { TrinaryLogic::No }
 
@@ -124,40 +124,40 @@ pub trait Type {
 
     fn is_offset_accessible(&self) -> TrinaryLogic { TrinaryLogic::No }
 
-    fn has_offset_value_type(&self, offset_type: Box<&dyn Type>) -> TrinaryLogic {
+    fn has_offset_value_type(&self, _offset_type: Box<&dyn Type>) -> TrinaryLogic {
         TrinaryLogic::No
     }
 
-    fn get_offset_value_type(&self, offset_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> {
+    fn get_offset_value_type(&self, _offset_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> {
         Err(())
     }
 
     fn set_offset_value_type(
         &self,
-        offset_type: Option<Box<&dyn Type>>,
-        value_type: Box<&dyn Type>,
-        union_values: bool,
+        _offset_type: Option<Box<&dyn Type>>,
+        _value_type: Box<&dyn Type>,
+        _union_values: bool,
     ) -> Result<Box<dyn Type>, ()> {
         Err(())
     }
 
-    fn unset_offset(&self, offset_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> { Err(()) }
+    fn unset_offset(&self, _offset_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> { Err(()) }
 
     fn get_keys_array(&self) -> Result<Box<dyn Type>, ()> { Err(()) }
 
     fn get_values_array(&self) -> Result<Box<dyn Type>, ()> { Err(()) }
 
-    fn fill_keys_array(&self, value_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> { Err(()) }
+    fn fill_keys_array(&self, _value_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> { Err(()) }
 
     fn flip_array(&self) -> Result<Box<dyn Type>, ()> { Err(()) }
 
-    fn intersect_key_array(&self, other_arrays_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> {
+    fn intersect_key_array(&self, _other_arrays_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> {
         Err(())
     }
 
     fn pop_array(&self) -> Result<Box<dyn Type>, ()> { Err(()) }
 
-    fn search_array(&self, needle_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> { Err(()) }
+    fn search_array(&self, _needle_type: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> { Err(()) }
 
     fn shift_array(&self) -> Result<Box<dyn Type>, ()> { Err(()) }
 
@@ -167,13 +167,13 @@ pub trait Type {
 
     fn get_finite_types(&self) -> Vec<Box<dyn Type>> { vec![] }
 
-    fn exponentiate(&self, exponent: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> { Err(()) }
+    fn exponentiate(&self, _exponent: Box<&dyn Type>) -> Result<Box<dyn Type>, ()> { Err(()) }
 
     fn is_callable(&self) -> TrinaryLogic { TrinaryLogic::No }
 
     fn get_callable_parameters_acceptors(
         &self,
-        scope: Box<&dyn ClassMemberAccessAnswerer>,
+        _scope: Box<&dyn ClassMemberAccessAnswerer>,
     ) -> Vec<Box<dyn ParametersAcceptor>> {
         vec![]
     }
@@ -194,9 +194,9 @@ pub trait Type {
 
     fn to_array_key(&self) -> Result<Box<dyn Type>, ()> { Err(()) }
 
-    fn is_smaller_than(&self, other_type: Box<&dyn Type>) -> TrinaryLogic { TrinaryLogic::No }
+    fn is_smaller_than(&self, _other_type: Box<&dyn Type>) -> TrinaryLogic { TrinaryLogic::No }
 
-    fn is_smaller_than_or_equal(&self, other_type: Box<&dyn Type>) -> TrinaryLogic {
+    fn is_smaller_than_or_equal(&self, _other_type: Box<&dyn Type>) -> TrinaryLogic {
         TrinaryLogic::No
     }
 
@@ -240,8 +240,8 @@ pub trait Type {
 
     fn loose_compare(
         &self,
-        r#type: Box<&dyn Type>,
-        php_version: PhpVersion,
+        _type: Box<&dyn Type>,
+        _php_version: PhpVersion,
     ) -> Box<dyn BooleanType> {
         Box::new(DefaultBooleanType)
     }
@@ -256,30 +256,30 @@ pub trait Type {
 
     fn get_template_type(
         &self,
-        ancestor_class_name: String,
-        template_type_name: String,
+        _ancestor_class_name: String,
+        _template_type_name: String,
     ) -> Result<Box<dyn Type>, ()> {
         Err(())
     }
 
-    fn infer_template_types(&self, received_type: Box<&dyn Type>) -> TemplateTypeMap {
+    fn infer_template_types(&self, _received_type: Box<&dyn Type>) -> TemplateTypeMap {
         todo!()
         // TemplateTypeMap::default()
     }
 
     fn get_referenced_template_types(
         &self,
-        position_variance: TemplateTypeVariance,
+        _position_variance: TemplateTypeVariance,
     ) -> Vec<TemplateTypeReference> {
         vec![]
     }
 
-    fn traverse(&self, callback: fn(r#type: &dyn Type) -> dyn Type) -> Box<dyn Type> { todo!() }
+    fn traverse(&self, _callback: fn(r#type: &dyn Type) -> dyn Type) -> Box<dyn Type> { todo!() }
 
     fn traverse_simultaneously(
         &self,
-        right: Box<&dyn Type>,
-        callback: fn(left: &dyn Type, right: &dyn Type) -> dyn Type,
+        _right: Box<&dyn Type>,
+        _callback: fn(left: &dyn Type, right: &dyn Type) -> dyn Type,
     ) -> Box<&dyn Type> {
         todo!()
     }
@@ -289,5 +289,5 @@ pub trait Type {
 
     fn try_remove(&self) -> Option<Box<dyn Type>> { None }
 
-    fn generalize(&self, precision: GeneralizePrecision) -> Box<dyn Type> { todo!() }
+    fn generalize(&self, _precision: GeneralizePrecision) -> Box<dyn Type> { todo!() }
 }

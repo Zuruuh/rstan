@@ -9,7 +9,7 @@ pub enum Token {
     #[token("\n")]
     LineJump,
     #[token("*")]
-    Line,
+    LineStart,
     #[token("&", priority = 2)]
     Reference,
     #[token("|")]
@@ -74,6 +74,21 @@ pub enum Token {
     Variable(String),
     #[regex(r#"[\w_][\w\d_\-\\]*"#, |lex| lex.slice().parse().ok())]
     Identifier(String),
+    #[regex(r#"[.]*"#r, |lex| lex.slice().parse().ok(), priority = 0)]
+    Text(String),
+}
+
+fn parse_identifier(lex: &mut Lexer<Token>) -> Option<String> {
+    lex.pre
+    let slice: Result<String, _> = lex.slice().parse();
+
+    if let Ok(text) = slice {
+        if text.len() > 1 {
+            return Some(text);
+        }
+    }
+
+    None
 }
 
 impl Display for Token {
@@ -84,7 +99,7 @@ impl Display for Token {
             match self {
                 Self::Whitespace(length) => " ".repeat(length.clone()),
                 Self::LineJump => "\n".to_owned(),
-                Self::Line => "*".to_owned(),
+                Self::LineStart => "*".to_owned(),
                 Self::Reference => "&".to_owned(),
                 Self::Union => "|".to_owned(),
                 Self::Intersection => "&".to_owned(),
@@ -115,8 +130,9 @@ impl Display for Token {
                 Self::This => "$this".to_owned(),
                 Self::_Self => "self".to_owned(),
                 Self::Static => "static".to_owned(),
-                Self::Tag(tag) => "tag".to_owned(),
+                Self::Tag(tag) => tag.clone(),
                 Self::Variable(variable) => variable.clone(),
+                Self::Text(text) => text.clone(),
             }
         )
     }

@@ -7,12 +7,15 @@ pub struct Lexer;
 
 impl Lexer {
     pub fn tokenize(string: &String) -> Result<Vec<Token>, String> {
-        let mut tokens: Vec<Token> = vec![];
         let lexer = Token::lexer(string);
 
-        dbg!(lexer.collect::<Vec<_>>());
+        let tokens = lexer
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(|_| "Invalid phpdoc".to_owned())?;
 
-        Ok(tokens)
+        dbg!(tokens);
+
+        Ok(vec![])
     }
 }
 
@@ -25,7 +28,7 @@ mod test {
         let string = String::from(
             r#"
         /**
-         * @param bool $test
+         * @param bool $test My custom text
          */
         "#,
         );

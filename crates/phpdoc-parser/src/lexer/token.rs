@@ -1,94 +1,87 @@
 use std::fmt::Display;
 
-use logos::Logos;
+use lazy_static::lazy_static;
+use regex::Regex;
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Logos)]
-pub enum Token {
-    #[regex(r#" +"#, |lex| lex.slice().parse().map(|whitespace: String| whitespace.len()).ok())]
-    Whitespace(usize),
-    #[token("\n")]
-    LineJump,
-    #[token("*")]
-    LineStart,
-    #[token("&", priority = 2)]
-    Reference,
-    #[token("|")]
-    Union,
-    #[token("&", priority = 1)]
-    Intersection,
-    #[token("?")]
-    Nullable,
-    #[token("!")]
-    Negated,
-    #[token("(")]
-    OpenParentheses,
-    #[token(")")]
-    CloseParentheses,
-    #[token("<")]
-    OpenAngleBracket,
-    #[token(">")]
-    CloseAngleBracket,
-    #[token("[")]
-    OpenSquareBracket,
-    #[token("]")]
-    CloseSquareBracket,
-    #[token("{")]
-    OpenCurlyBracket,
-    #[token("}")]
-    CloseCurlyBracket,
-    #[token(",")]
-    Comma,
-    #[token(":")]
-    Colon,
-    #[token("...")]
-    Variadic,
-    #[token("::")]
-    DoubleColon,
-    #[token("=>")]
-    DoubleArrow,
-    #[token("->")]
-    Arrow,
-    #[token("=")]
-    Equal,
-    #[token("/**")]
-    OpenPhpdoc,
-    #[token("*/")]
-    ClosePhpdoc,
-    #[regex(r#"-?[0-9]+"#, |lex| lex.slice().parse().ok(), priority = 2)]
-    LiteralInteger(String),
-    #[regex(r#"-?[0-9]+\.[0-9]+"#, |lex| lex.slice().parse().ok())]
-    LiteralFloat(String),
-    #[regex(r#"'.*'"#, |lex| lex.slice().parse().ok())]
-    LiteralSingleQuotedString(String),
-    #[regex(r#"".*""#, |lex| lex.slice().parse().ok())]
-    LiteralDoubleQuotedString(String),
-    #[token("\\$this")]
-    This,
-    #[token("static")]
-    Static,
-    #[token("self")]
-    _Self,
-    #[regex(r#"@[\w-]+"#, |lex| lex.slice().parse().ok(), priority = 3)]
-    Tag(String),
-    #[regex(r#"\$[\w_][\w\d_]*"#, |lex| lex.slice().parse().ok())]
-    Variable(String),
-    #[regex(r#"[\w_][\w\d_\-\\]*"#, |lex| lex.slice().parse().ok())]
-    Identifier(String),
-    #[regex(r#"[.]*"#r, |lex| lex.slice().parse().ok(), priority = 0)]
-    Text(String),
+lazy_static! {
+    pub static ref WHITESPACE_REGEX: Regex = Regex::new(r#"^ +"#).unwrap();
+    pub static ref LINE_JUMP_TOKEN: &'static str = "\n";
+    pub static ref LINE_START_TOKEN: &'static str = "*";
+    pub static ref REFERENCE_TOKEN: &'static str = "&";
+    pub static ref UNION_TOKEN: &'static str = "|";
+    pub static ref INTERSECTION_TOKEN: &'static str = "&";
+    pub static ref NULLABLE_TOKEN: &'static str = "?";
+    pub static ref NEGATED_TOKEN: &'static str = "!";
+    pub static ref OPEN_PARENTHESE_TOKEN: &'static str = "(";
+    pub static ref CLOSE_PARENTHESE_TOKEN: &'static str = ")";
+    pub static ref OPEN_ANGLE_BRACKET_TOKEN: &'static str = "<";
+    pub static ref CLOSE_ANGLE_BRACKET_TOKEN: &'static str = ">";
+    pub static ref OPEN_SQUARE_BRACKET_TOKEN: &'static str = "[";
+    pub static ref CLOSE_SQUARE_BRACKET_TOKEN: &'static str = "]";
+    pub static ref OPEN_CURLY_BRACKET_TOKEN: &'static str = "{";
+    pub static ref CLOSE_CURLY_BRACKET_TOKEN: &'static str = "}";
+    pub static ref COMMA_TOKEN: &'static str = ",";
+    pub static ref COLON_TOKEN: &'static str = ":";
+    pub static ref VARIADIC_TOKEN: &'static str = "...";
+    pub static ref DOUBLE_COLON_TOKEN: &'static str = "::";
+    pub static ref DOUBLE_ARROW_TOKEN: &'static str = "=>";
+    pub static ref ARROW_TOKEN: &'static str = "->";
+    pub static ref EQUAL_TOKEN: &'static str = "=";
+    pub static ref OPEN_PHPDOC_TOKEN: &'static str = "/**";
+    pub static ref CLOSE_PHPDOC_TOKEN: &'static str = "*/";
+    pub static ref LITERAL_INTEGER_REGEX: Regex = Regex::new(r#"^-?[0-9]+"#,).unwrap();
+    pub static ref LITERAL_FLOAT_REGEX: Regex = Regex::new(r#"^-?[0-9]+\.[0-9]+"#,).unwrap();
+    pub static ref LITERAL_SINGLE_QUOTED_STRING_REGEX: Regex = Regex::new(r#"^'.*'"#,).unwrap();
+    pub static ref LITERAL_DOUBLE_QUOTED_STRING_REGEX: Regex = Regex::new(r#"^".*""#,).unwrap();
+    pub static ref THIS_TOKEN: &'static str = "$this";
+    pub static ref STATIC_TOKEN: &'static str = "static";
+    pub static ref SELF_TOKEN: &'static str = "self";
+    pub static ref IS_TOKEN: &'static str = "is";
+    pub static ref TAG_REGEX: Regex = Regex::new(r#"^@[\w-]+"#).unwrap();
+    pub static ref VARIABLE_REGEX: Regex = Regex::new(r#"^\$[\w_][\w\d_]*"#).unwrap();
+    pub static ref IDENTIFIER_REGEX: Regex = Regex::new(r#"^[\w_][\w\d_\-\\]*"#).unwrap();
+    pub static ref TEXT_REGEX: Regex = Regex::new(r#"^[.]*"#).unwrap();
 }
 
-fn parse_identifier(lex: &mut Lexer<Token>) -> Option<String> {
-    lex.pre
-    let slice: Result<String, _> = lex.slice().parse();
-
-    if let Ok(text) = slice {
-        if text.len() > 1 {
-            return Some(text);
-        }
-    }
-
-    None
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum Token {
+    Whitespace(usize),
+    LineJump,
+    LineStart,
+    Reference,
+    Union,
+    Intersection,
+    Nullable,
+    Negated,
+    OpenParentheses,
+    CloseParentheses,
+    OpenAngleBracket,
+    CloseAngleBracket,
+    OpenSquareBracket,
+    CloseSquareBracket,
+    OpenCurlyBracket,
+    CloseCurlyBracket,
+    Comma,
+    Colon,
+    Variadic,
+    DoubleColon,
+    DoubleArrow,
+    Arrow,
+    Equal,
+    OpenPhpdoc,
+    ClosePhpdoc,
+    LiteralInteger(String),
+    LiteralFloat(String),
+    LiteralSingleQuotedString(String),
+    LiteralDoubleQuotedString(String),
+    This,
+    Static,
+    _Self,
+    Is,
+    Tag(String),
+    Variable(String),
+    Identifier(String),
+    Text(String),
 }
 
 impl Display for Token {
@@ -130,6 +123,7 @@ impl Display for Token {
                 Self::This => "$this".to_owned(),
                 Self::_Self => "self".to_owned(),
                 Self::Static => "static".to_owned(),
+                Self::Is => "is".to_owned(),
                 Self::Tag(tag) => tag.clone(),
                 Self::Variable(variable) => variable.clone(),
                 Self::Text(text) => text.clone(),

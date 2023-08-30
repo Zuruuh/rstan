@@ -1,38 +1,40 @@
+mod extractor;
 mod token;
 
-use logos::Logos;
+use extractor::Extractor;
 pub use token::Token;
 
 pub struct Lexer;
 
 impl Lexer {
     pub fn tokenize(string: &String) -> Result<Vec<Token>, String> {
-        let lexer = Token::lexer(string);
+        let mut tokens: Vec<Token> = vec![];
+        let mut extractor = Extractor {
+            string: string.clone(),
+        };
 
-        let tokens = lexer
-            .collect::<Result<Vec<_>, _>>()
-            .map_err(|_| "Invalid phpdoc".to_owned())?;
+        extractor.extract_whitespace(&mut tokens)?;
+        tokens
+            .push(extractor.extract_from_start(&*token::OPEN_PHPDOC_TOKEN, |_| Token::OpenPhpdoc)?);
 
-        dbg!(tokens);
+        loop {
+            if extractor.string.is_empty() {
+                break;
+            }
 
-        Ok(vec![])
-    }
-}
+            extractor.extract_whitespace(&mut tokens)?;
+            if let Ok(line_start) =
+                extractor.extract_from_start(&*token::LINE_START_TOKEN, |_| Token::LineStart)
+            {
+                tokens.push(line_start);
+            }
 
-#[cfg(test)]
-mod test {
-    use super::Lexer;
+            // if let Ok()
+        }
 
-    #[test]
-    pub fn yes() {
-        let string = String::from(
-            r#"
-        /**
-         * @param bool $test My custom text
-         */
-        "#,
-        );
+        dbg!(&tokens);
+        dbg!(&extractor.string);
 
-        Lexer::tokenize(&string).unwrap();
+        Ok(tokens)
     }
 }
